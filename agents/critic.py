@@ -1,15 +1,18 @@
 class CriticAgent(Agent):
 
-    def run(self, full_context):
-        prompt = f"""
-        Act as a harsh peep reviewer:
+    def run(self, context):
+        analysis = context['analysis']
 
-        Identify:
-        - Methodical flaws
-        - alternative explanations
-        - overfitting or bias
-        - suggestions for next experiments
-        """
-
-        return self.llm.generate(prompt, temperature=0.4)
+        if 'does NOT' in str(analysis):
+            return {
+                'fatal_flaw': True,
+                'reason': 'Hypothesis disproven symbolically.',
+                'continue': False
+            }
+        
+        return {
+            'fatal_flaw': False,
+            'reason': 'No immediate logical flaws',
+            'continue': True
+        }
         

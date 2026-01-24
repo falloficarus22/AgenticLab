@@ -4,28 +4,28 @@ class ScienceOrchestrator:
         self.agents = agents
         self.memory = memory
 
-    def run(self, problem, iterations = 3):
+    def run(self, problem, max_iters=5):
         context = {'problem': problem}
-
-        for i in range(iterations):
+        
+        for i in range(max_iters):
             h = self.agents['hypothesis'].run(context)
             p = self.agents['planner'].run(h)
             e = self.agents['executor'].run(p)
             a = self.agents['analyzer'].run(e)
             c = self.agents['critic'].run({
                 'hypothesis': h,
-                'plan': p,
-                'execution': e,
                 'analysis': a
-            })
+                })
 
             self.memory_log({
                 'iteration': i,
                 'hypothesis': h,
-                'plan': p.
+                'plan': p,
                 'execution': e,
                 'analysis': a,
-                'critique': c
-            })
+                'critic': c
+                })
 
-            context['feedback'] = c
+            if not c['continue']:
+                break
+

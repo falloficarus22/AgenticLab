@@ -1,15 +1,15 @@
 class AnalyzerAgent(Agent):
 
-    def run(self, results):
-        prompt = f"""
-        Analyze the following experimental results:
-        {results}
+    def run(self, tool_results):
+        conclusions = []
 
-        Return:
-        - statistical_summary
-        - interpretation
-        - hypothesis_support (true/false/partial)
-        """
-
-        return self.llm.generate(prompt, temperature=0.2)
+        for r in tool_results:
+            if r['output']['simplified'] == '0':
+                conclusions.append('Identity holds symbolically.')
+            else:
+                conclusions.append('Identity does NOT simplify to zero.')
         
+        return {
+            'conclusions': conclusions,
+            'confidence': 0.9
+        }

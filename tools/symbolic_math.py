@@ -103,5 +103,21 @@ class SymbolicMathSolver(Tool):
             return {'success': False, 'error': str(e)}
 
 # Tool interface for agents
-def tool_interface():
+def execute_symbolic_math(operation, **kwargs):
+    """Interface for agents to use symbolic math tools."""
+    solver = SymbolicSolver()
+
+    operations = {
+        'define_symbols': solver.define_symbols,
+        'solve_equation': solver.solve_equation,
+        'differentiate': solver.differentiate,
+        'integrate': solver.integrate,
+        'simplify': solver.simplify_expression,
+        'evaluate': solver.evaluate_numerical
+    }
+
+    if operation not in operations:
+        return {'success': False, 'error': f"Unknown operation: {operation}"}
+
+    return operations[operation](**kwargs)
     
